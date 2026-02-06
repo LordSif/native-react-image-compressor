@@ -46,65 +46,87 @@ function App() {
   }
 
   return (
-    <div>
-      <h1>Comprimir imagen con Canvas Blob nativo</h1>
-      <p>Selecciona una imagen para comprimir</p>
+    <div className='container'>
+      <div className='header'>
+        <h1>Compresor de Imagenes - Canvas Blob</h1>
+        <p>Reduce el tamaño de tus imagenes</p>
+      </div>
 
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleFileChange}
-        disabled={loading}
-      />
-      {loading && <p style={{ color: "blue" }}>Comprimiendo imagen...</p>}
-      {error && <p style={{ color: "red" }}>Error: {error}</p>}
-
-      <h2>Resultados de compresion:</h2>
-
-      <h3>Original</h3>
-      <p>Tamaño: **{originalSize} MB**</p>
-      {originalUrl && (
-        <img
-          src={originalUrl}
-          alt="Imagen Original"
-          style={{
-            maxWidth: "100%",
-            maxHeight: "200px",
-            border: "1px solid black",
-          }}
-        />
-      )}
-
-      <h3>Comprimida</h3>
-      <p>Tamaño:<strong style={{ color: "green" }}>{compressedSize}KB</strong></p>
-      {compressedUrl && (
-        <>
-          <img
-            src={compressedUrl}
-            alt="Imagen Comprimida"
-            style={{
-              maxWidth: "100%",
-              maxHeight: "200px",
-              border: "1px solid black",
-            }}
+      <div className='content'>
+        <div className='upload-area'>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            disabled={loading}
           />
-          <h3>Descargar</h3>
-          <a
-            href={compressedUrl}
-            download={nombre}
-            style={{
-              display: "inline-block",
-              marginTop: "10px",
-              padding: "8px 12px",
-              backgroundColor: "#4CAF50",
-              color: "white",
-              textDecoration: "none",
-              borderRadius: "4px",
-            }}
-          >
-            Descargar Imagen Comprimida
-          </a>
-        </>)}
+          {loading && <p style={{ color: "blue" }}>Comprimiendo imagen...</p>}
+          {error && <p style={{ color: "red" }}>Error: {error}</p>}
+        </div>
+        <div className='progress-container'>
+
+        </div>
+        <div className='preview-container'>
+          <div className='preview-box'>
+
+            <h3>Original</h3>
+            <p>Tamaño: **{originalSize} MB**</p>
+            {originalUrl && (
+              <img
+                src={originalUrl}
+                alt="Imagen Original"
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "200px",
+                  border: "1px solid black",
+                }}
+              />
+            )}
+          </div>
+          <div className='preview-box'>
+
+            <h3>Comprimida</h3>
+            <p>Tamaño:<strong style={{ color: "green" }}>{compressedSize}KB</strong></p>
+            {compressedUrl && (
+              <>
+                <img
+                  src={compressedUrl}
+                  alt="Imagen Comprimida"
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "200px",
+                    border: "1px solid black",
+                  }}
+                />
+                <h3>Descargar</h3>
+                <a
+                  href={compressedUrl}
+                  download={nombre}
+                  style={{
+                    display: "inline-block",
+                    marginTop: "10px",
+                    padding: "8px 12px",
+                    backgroundColor: "#4CAF50",
+                    color: "white",
+                    textDecoration: "none",
+                    borderRadius: "4px",
+                  }}
+                >
+                  Descargar Imagen Comprimida
+                </a>
+              </>)}
+          </div>
+
+
+        </div>
+        <div className='controls'>
+
+        </div>
+
+        <div className='setting'>
+
+        </div>
+      </div>
     </div>
   )
 }
