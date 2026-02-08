@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css'
+import uploadIcon from './assets/upload-icon.png'
 import { compressImage } from './compressImage'
 
 function App() {
@@ -54,9 +55,15 @@ function App() {
 
       <div className='content'>
         <div className='upload-area'>
+          <img src={uploadIcon} alt="Subir Imagen" className='upload-icon' />
+          <h2>Arrastra y suelta tu iamgen aqui</h2>
+          <p>o haz click para seleccionar una imagen</p>
+          <p>Formatos soportados: JPG, PNG, WebP, GIF</p>
           <input
             type="file"
             accept="image/*"
+            id='imageInput'
+            style={{ display: "none" }}
             onChange={handleFileChange}
             disabled={loading}
           />
@@ -123,11 +130,24 @@ function App() {
 
         </div>
 
-        <div className='setting'>
+        <div className='settings'>
+          <h4>Configuracion de Compresion</h4>
+          <div className="settings-grid">
+            <div className='setting-item'>
+              <label htmlFor="quality">Calidad (0.1 - 1.0):</label>
 
+            </div>
+            <div className='setting-item'>
+              <label htmlFor="maxWidth">Ancho maximo (px):</label>
+
+            </div>
+            <div className='setting-item'>
+              <label htmlFor="maxHeight">Altura Maxima (px):</label>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 

@@ -1,4 +1,4 @@
-#root {
+* {
   margin: 0 auto;
   padding: 0;
   box-sizing: border-box;
@@ -49,7 +49,25 @@ body {
   margin-bottom: 30px;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: #c3dffc;
+  background: #f8f9fa;
+}
+
+.upload-area:hover {
+  background: #e9ecef;
+  border-color: #2980b9;
+}
+
+.upload-area.dragover {
+  border-color: #2980b9;
+  background: #e9ecef;
+  transform: scale(1.02);
+}
+
+.upload-icon {
+  width: 4em;
+  height: 4em;
+  color: #3498db;
+  margin-bottom: 15px;
 }
 
 .preview-container {
@@ -64,6 +82,37 @@ body {
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+
+.settings {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.settings h4 {
+  margin-bottom: 15px;
+  color: #2c3a50;
+  text-align: center;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.setting-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.setting-item label {
+  font-weight: 600;
+  color: #2c3a50;
 }
 
 .logo {
