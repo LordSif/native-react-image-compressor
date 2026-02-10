@@ -53,13 +53,13 @@ body {
 }
 
 .upload-area:hover {
-  background: #e9ecef;
-  border-color: #2980b9;
+  background: #adc0d3;
+  border-color: #2389ce;
 }
 
 .upload-area.dragover {
-  border-color: #2980b9;
-  background: #e9ecef;
+  border-color: #1983ca;
+  background: #adc0d3;
   transform: scale(1.02);
 }
 
@@ -122,6 +122,10 @@ body {
   margin: 8px 0;
   font-size: 0.95em;
   color: #555;
+}
+
+.info-item strong {
+  color: #2c3a50;
 }
 
 .settings {
