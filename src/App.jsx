@@ -11,14 +11,16 @@ function App() {
   const [originalDimensions, setOriginalDimensions] = useState(null);
   const [compressedSize, setCompressedSize] = useState(null);
   const [compressedUrl, setCompressedUrl] = useState(null);
-  const [nombre, setNombre] = useState(null);
+  const [compressedName, setCompressedName] = useState(null);
+  const [compressedDimensions, setCompressedDimensions] = useState(null)
+  const [reduction, setReduction] = useState(null)
+  const [savings, setSavings] = useState(null)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
 
   const handleFileChange = async (img) => {
     const file = img;
-    console.log("Archivo seleccionado:", file);
     setError(null);
     setLoading(true);
     setOriginalSize(null);
@@ -30,6 +32,8 @@ function App() {
       setLoading(false);
       return;
     }
+
+    
 
     try {
       // Original image data
@@ -47,8 +51,11 @@ function App() {
 
       // Compressed image data
       setCompressedUrl(URL.createObjectURL(compressedFileReady));
-      setNombre(compressedFileReady.name);
+      setCompressedName(compressedFileReady.name);
       setCompressedSize(formatFileSize(compressedFileReady.size));
+      setCompressedDimensions(`${compressedFileReady.dimensions.width} x ${compressedFileReady.dimensions.height}px`)
+      setReduction(((file.size - compressedFileReady.size) / file.size * 100).toFixed(1))
+      setSavings(formatFileSize(file.size - compressedFileReady.size))
 
     } catch (error) {
       setError(error.message)
@@ -164,15 +171,15 @@ function App() {
             <div className='compressedPreview'>
               <div className='info-box'>
                 <div className='info-item'><strong>Tamaño:</strong> {compressedSize}</div>
-                <div className='info-item'><strong>Dimensiones:</strong> { }</div>
-                <div className='info-item'><strong>Reducción:</strong> { }%</div>
-                <div className='comparison'></div>
+                <div className='info-item'><strong>Dimensiones:</strong> {compressedDimensions}</div>
+                <div className='info-item'><strong>Reducción:</strong> {reduction}% más pequeño</div>
+                <div className='comparison'><strong>Ahorras:</strong> {savings}</div>
               </div>
             </div>
             <h3>Descargar</h3>
             <a
               href={compressedUrl}
-              download={nombre}
+              download={compressedName}
               style={{
                 display: "inline-block",
                 marginTop: "10px",
@@ -190,8 +197,8 @@ function App() {
 
         {/* Controls */}
         <div className='controls'>
-          <button className='btn btn-primary' id='compressBtn'>Comprimir Imagen</button>
-          <button className='btn btn-success' id='downloadBtn'>Descargar Comprimida</button>
+          <button className='btn btn-primary' id='compressBtn' disabled>Comprimir Imagen</button>
+          <button className='btn btn-success' id='downloadBtn' disabled>Descargar Comprimida</button>
           <button className='btn btn-secondary' id='resetBtn'>Nueva Imagen</button>
         </div>
 

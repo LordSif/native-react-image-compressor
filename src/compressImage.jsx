@@ -60,7 +60,7 @@ export const compressImage = (
                   lastModified: Date.now()
                 }
               )
-
+              compressedFile.dimensions = { width, height }
               resolve(compressedFile);
             } else {
               reject(new Error("Error al generar el Blob comprimido."));

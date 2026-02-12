@@ -128,6 +128,14 @@ body {
   color: #2c3a50;
 }
 
+.comparison {
+  font-weight: bold;
+  color: #27ae60;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e9ecef;
+}
+
 .settings {
   background: #f8f9fa;
   padding: 20px;
@@ -157,6 +165,7 @@ body {
   font-weight: 600;
   color: #2c3a50;
 }
+
 
 .controls {
   display: flex;
@@ -209,6 +218,12 @@ body {
   box-shadow: none !important;
 }
 
+.btn:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
 
 
 .logo {
