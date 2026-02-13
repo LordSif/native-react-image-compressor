@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import './App.css'
 import uploadIcon from './assets/upload-icon.png'
 import { compressImage } from './compressImage'
 
 function App() {
+  const [originalFile, setOriginalFile] = useState(null)
   const [originalName, setOriginalName] = useState(null);
   const [originalUrl, setOriginalUrl] = useState(null);
   const [originalType, setOriginalType] = useState(null);
@@ -18,25 +19,29 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef(null)
 
-  const handleFileChange = async (img) => {
+  // Handle File
+  const handleFile = (img) => {
     const file = img;
     setError(null);
     setLoading(true);
     setOriginalSize(null);
-    setCompressedSize(null);
     setOriginalUrl(null);
     setCompressedUrl(null);
+    setCompressedName(null)
+    setCompressedDimensions(null)
+    setCompressedSize(null);
+    setSavings(null)
+    setReduction(null)
 
     if (!file) {
       setLoading(false);
       return;
     }
 
-    
-
     try {
-      // Original image data
+      setOriginalFile(file)
       setOriginalUrl(URL.createObjectURL(file));
       setOriginalName(file.name);
       setOriginalSize(formatFileSize(file.size));
@@ -47,24 +52,64 @@ function App() {
         setOriginalDimensions(`${originalImg.width} × ${originalImg.height}px`);
       };
 
-      const compressedFileReady = await compressImage(file, 1280, 0.6);
-
-      // Compressed image data
-      setCompressedUrl(URL.createObjectURL(compressedFileReady));
-      setCompressedName(compressedFileReady.name);
-      setCompressedSize(formatFileSize(compressedFileReady.size));
-      setCompressedDimensions(`${compressedFileReady.dimensions.width} x ${compressedFileReady.dimensions.height}px`)
-      setReduction(((file.size - compressedFileReady.size) / file.size * 100).toFixed(1))
-      setSavings(formatFileSize(file.size - compressedFileReady.size))
 
     } catch (error) {
       setError(error.message)
     } finally {
       setLoading(false);
     }
-
   }
 
+  const handleReset = () => {
+    setOriginalFile(null)
+    setOriginalName(null);
+    setOriginalUrl(null);
+    setOriginalType(null);
+    setOriginalSize(null);
+    setOriginalDimensions(null);
+    setCompressedSize(null);
+    setCompressedUrl(null);
+    setCompressedName(null);
+    setCompressedDimensions(null);
+    setReduction(null);
+    setSavings(null);
+    setError(null);
+    fileInputRef.current.value = ""
+  };
+
+  // Handle compress image
+  const handleCompressImage = async () => {
+    if (!originalFile) return
+    setLoading(true)
+    setError(null)
+
+    try {
+      const compressedFileReady = await compressImage(originalFile, 1280, 0.6);
+      setCompressedUrl(URL.createObjectURL(compressedFileReady));
+      setCompressedName(compressedFileReady.name);
+      setCompressedSize(formatFileSize(compressedFileReady.size));
+      setCompressedDimensions(`${compressedFileReady.dimensions.width} x ${compressedFileReady.dimensions.height}px`)
+      setReduction(((originalFile.size - compressedFileReady.size) / originalFile.size * 100).toFixed(1))
+      setSavings(formatFileSize(originalFile.size - compressedFileReady.size))
+
+    } catch (error) {
+      setError(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Handle download image
+  const handleDownloadImage = () => {
+    if (compressedUrl && compressedName) {
+      const link = document.createElement("a")
+      link.href = compressedUrl
+      link.download = compressedName
+      link.click()
+    }
+  }
+
+  // Format file size
   const formatFileSize = (bytes) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -75,13 +120,13 @@ function App() {
 
   // Handle click on upload area
   const handleAreaClick = () => {
-    imageInput.click();
+    fileInputRef.current?.click();
   }
 
   // Handle file selection from input
   const handleFileSelect = (event) => {
     const img = event.target.files[0];
-    handleFileChange(img);
+    handleFile(img);
   }
 
   // Handle drag and drop events
@@ -100,7 +145,7 @@ function App() {
     setIsDragging(false);
     const img = e.dataTransfer.files;
     if (img.length > 0) {
-      handleFileChange(img[0]);
+      handleFile(img[0]);
     }
   }
 
@@ -130,11 +175,12 @@ function App() {
             id='imageInput'
             style={{ display: "none" }}
             onChange={handleFileSelect}
+            ref={fileInputRef}
           />
         </div>
 
         {/* Progress bar */}
-        <div className='progress-container'>
+        <div className='progress-container '>
           <div className='progress-bar'>
             <div className='progress-fill'></div>
           </div>
@@ -142,7 +188,7 @@ function App() {
         </div>
 
         {/* Preview container */}
-        <div className='preview-container'>
+        <div className={`preview-container ${originalUrl ? 'show' : ''}`}>
           <div className='preview-box'>
             <h3>Imagen Original</h3>
             {originalUrl && (
@@ -176,30 +222,14 @@ function App() {
                 <div className='comparison'><strong>Ahorras:</strong> {savings}</div>
               </div>
             </div>
-            <h3>Descargar</h3>
-            <a
-              href={compressedUrl}
-              download={compressedName}
-              style={{
-                display: "inline-block",
-                marginTop: "10px",
-                padding: "8px 12px",
-                backgroundColor: "#4CAF50",
-                color: "white",
-                textDecoration: "none",
-                borderRadius: "4px",
-              }}
-            >
-              Descargar Imagen Comprimida
-            </a>
           </div>
         </div>
 
         {/* Controls */}
         <div className='controls'>
-          <button className='btn btn-primary' id='compressBtn' disabled>Comprimir Imagen</button>
-          <button className='btn btn-success' id='downloadBtn' disabled>Descargar Comprimida</button>
-          <button className='btn btn-secondary' id='resetBtn'>Nueva Imagen</button>
+          <button className='btn btn-primary' id='compressBtn' onClick={handleCompressImage} disabled={!originalFile}>Comprimir Imagen</button>
+          <button className='btn btn-success' id='downloadBtn' onClick={handleDownloadImage} disabled={!compressedUrl}>Descargar Comprimida</button>
+          <button className='btn btn-secondary' id='resetBtn' onClick={handleReset}>Nueva Imagen</button>
         </div>
 
         {/* Settings */}
